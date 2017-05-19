@@ -1,0 +1,49 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+# Lab1
+
+```{r}
+library(tidyverse)
+
+series_from_imdb_changed <- read_csv("~/Documents/ad1/lab1-parte1/imdb-series/data/series_from_imdb_changed.csv")
+
+minhas_series <- series_from_imdb_changed %>% filter(series_name %in% c("How to Get Away with Murder", "Breaking Bad",
+                                                                "House of Cards", "Friends",
+                                                                "Game of Thrones", "Narcos"))
+
+# a season 10 de friends veio com problemas nos dados
+
+series_from_imdb_changed %>% 
+  filter(series_name == "Friends") %>% 
+  mutate(season = as.character(season)) %>% 
+  ggplot(aes(x = season_ep, y = UserRating, color = season)) + 
+  geom_line() + 
+  geom_point() 
+
+
+##variacao das notas por serie
+minhas_series %>% 
+    ggplot(aes(x = as.character(series_name), y = UserRating)) + 
+    geom_boxplot(outlier.color = NA) +   
+    geom_jitter(width = .1, size = .5, alpha = .5, color = "red")
+```
+
+```{r}
+series_from_imdb_changed %>% 
+  filter(series_name == "Friends") %>% 
+  mutate(season = as.character(season)) %>% 
+  ggplot(aes(x = season_ep, y = UserRating, color = season)) + 
+  geom_line() + 
+  geom_point() 
+
+```
+
+```{r}
+##variacao das notas por serie
+minhas_series %>% 
+    ggplot(aes(x = as.character(series_name), y = UserRating)) + 
+    geom_boxplot(outlier.color = NA) +   
+    geom_jitter(width = .1, size = .5, alpha = .5, color = "red")
+```
