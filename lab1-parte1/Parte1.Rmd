@@ -22,6 +22,13 @@ series_from_imdb_changed %>%
   geom_line() + 
   geom_point() 
 
+series_from_imdb_changed %>% 
+  filter(series_name == "Game of Thrones") %>% 
+  mutate(season = as.character(season)) %>% 
+  ggplot(aes(x = season_ep, y = UserRating, color = season)) + 
+  geom_line() + 
+  geom_point() 
+
 
 ##variacao das notas por serie
 minhas_series %>% 
