@@ -1,6 +1,7 @@
 ---
 title: "Lab1-parte1"
 output: html_document
+author: Bruna Barbosa
 ---
 
 ## LAB1-PARTE1
