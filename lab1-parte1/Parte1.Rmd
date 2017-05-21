@@ -54,6 +54,8 @@ A diferença nao é grande. Visto que os episodios podem receber notas entre 1 e
 
 ### Qual das séries que você escolheu tem episódios de qualidade mais irregular segundo o IMDB? A diferença é grande? Pequena?
 
+Qualidade irregular é indicada pela variancia das notas atribuidas as series pelos usuarios.
+
 A serie que mais varia de qualidade entre um valor maximo e um valor minimo é Breaking Bad. 
 De acordo com o plot acima, a variaçao entre Breaking Bad, Game of Thrones e House of Cards tem variancia similar. Narcos parece ter seriados com qualidade mais constante, a maior parte das avaliaçoes estao concentradas proximo a mediana.
 
@@ -67,7 +69,9 @@ hoc <- minhas_series %>%
   filter(series_name == "House of Cards")
 narcos <- minhas_series %>%
   filter(series_name == "Narcos")
+```
 
+```{r}
 sd(got$UserRating)
 sd(bb$UserRating)
 sd(hoc$UserRating)
@@ -87,6 +91,9 @@ sd(narcos$UserRating)
 O desvio padrao mostra como as avaliacoes variam de acordo com a mediana, as series com qualidade mais irregular tem um maior desvio padrao.
 
 Narcos possui o menor desvio padrao, a maior concentracao de pontos esta em torno da mediana como pode se observar no boxplot.
+
+
+
 
 
 
