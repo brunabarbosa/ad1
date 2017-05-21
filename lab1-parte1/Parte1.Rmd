@@ -1,10 +1,12 @@
 ---
 title: "R Notebook"
-output: html_notebook
+output:
+  html_document: default
+  html_notebook: default
 ---
 # Lab1
 
-```{r}
+```{r eval=FALSE}
 
 #library(tidyverse)
 library(readr)
@@ -26,33 +28,38 @@ minhas_series <- series_from_imdb %>% filter(series_name %in% c("Breaking Bad",
 summary(minhas_series)
 ```
 
-Nenhuma das series escolhidas veio com algum valor inesperado.
+Nenhuma das series escolhidas veio com algum valor inesperado. As notas que os usuarios atribuiram as series
+variam de 7.7 a 10, e nao possuem valores faltando.
+
+### Boxplot
 
 ```{r}
 minhas_series %>% 
     ggplot(aes(x = as.character(series_name), y = UserRating)) + 
     geom_boxplot(outlier.color = NA) +   
     geom_jitter(width = .1, size = .5, alpha = .5, color = "red")
-
 ```
 
 
-### Qual das séries que você escolheu é mais bem avaliada no IMDB? A diferença é grande? Pequena? 
+
+
+#### Qual das séries que você escolheu é mais bem avaliada no IMDB? A diferença é grande? Pequena? 
 
 Considerando a mediana como meio de mensurar a qualidade das series, a serie mais bem avaliada é Game of Thrones.
+
 A mediana foi escolhida como forma de resumo dos dados pois é mais robusta a outliers que a média.
 
-A serie Game of thrones tambem possui o valor do primeiro quartil maior que o dos boxplots dos outros seriados. 
+Em conjunto com a meiana, a serie Game of thrones possui o valor do primeiro quartil maior que o dos boxplots dos outros seriados. A maior parte das avaliacoes da serie game of thrones estao acima de 8.79, o que nao é verdade para os outros seriados, apesar de que breaking bad tem compartamento bem proximo.
 
 Um dos episodios de breaking bad obteve o score perfeito de 10 pontos. No entando a maior concentraçao de pontos esta em torno da mediana 8.8, sua mediana é um pouco mais baixa que a de game of thrones.
 
-Game of Thrones e Breaking Bad parecem ter uma qualidade parecida, pois as notas dos episodios tem distribuiçao similar.
+Game of Thrones e Breaking Bad parecem ter uma qualidade de episodios parecida, pois as notas atribuidas pelos usuarios tem distribuiçao similar.
 
 A diferença nao é grande. Visto que os episodios podem receber notas entre 1 e 10, a mediana das notas de todas as series escolhidas estão entre 8 e 9.
 
 
 
-### Qual das séries que você escolheu tem episódios de qualidade mais irregular segundo o IMDB? A diferença é grande? Pequena?
+#### Qual das séries que você escolheu tem episódios de qualidade mais irregular segundo o IMDB? A diferença é grande? Pequena?
 
 Qualidade irregular é indicada pela variancia das notas atribuidas as series pelos usuarios.
 
