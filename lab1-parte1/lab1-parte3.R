@@ -8,8 +8,8 @@
 # 6. Series ja encerradas possuem uma proporcao maior de pessoas votando 10 no ultimo episodio
 # 7. Episodios pilotos possuem maior parte das pessoas atribuindo notas abaixo de 7.
 # 8. Season finales sao mais bem avaliadas que os outros episodios da serie
-# 9. Series distribuidas em batch tem melhor avaliacao do que series distribuidas semanalmente? 
-
+# 9. Series distribuidas em batch tem melhor avaliacao do que series distribuidas semanalmente? (qualidade regular?) 
+#O ultimo episodio nao recebe uma nota pior do que a nota que a serie recebe na media
 ## Series ja encerradas possuem uma proporcao maior de pessoas votando 10 no ultimo episodio
 # How I Met Your Mother
 # Friends
