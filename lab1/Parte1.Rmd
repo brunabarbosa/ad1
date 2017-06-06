@@ -1,0 +1,107 @@
+---
+title: "R Notebook"
+output:
+  html_document: default
+  html_notebook: default
+---
+# Lab1
+
+```{r eval=FALSE}
+
+#library(tidyverse)
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+series_from_imdb <- read_csv("~/Documents/ad1/lab1-parte1/series_from_imdb.csv")
+#series_from_imdb <- read_csv("~/Documentos/ad1/lab1-parte1/series_from_imdb.csv")
+
+
+minhas_series <- series_from_imdb %>% filter(series_name %in% c("Breaking Bad",
+                                                                "House of Cards",
+                                                                "Game of Thrones", 
+                                                                "Narcos"))
+
+```
+
+```{r}
+summary(minhas_series)
+```
+
+Nenhuma das series escolhidas veio com algum valor inesperado. As notas que os usuarios atribuiram as series
+variam de 7.7 a 10, e nao possuem valores faltando.
+
+### Boxplot
+
+```{r}
+minhas_series %>% 
+    ggplot(aes(x = as.character(series_name), y = UserRating)) + 
+    geom_boxplot(outlier.color = NA) +   
+    geom_jitter(width = .1, size = .5, alpha = .5, color = "red")
+```
+
+
+
+
+#### Qual das séries que você escolheu é mais bem avaliada no IMDB? A diferença é grande? Pequena? 
+
+Considerando a mediana como meio de mensurar a qualidade das series, a serie mais bem avaliada é Game of Thrones.
+
+A mediana foi escolhida como forma de resumo dos dados pois é mais robusta a outliers que a média.
+
+Em conjunto com a meiana, a serie Game of thrones possui o valor do primeiro quartil maior que o dos boxplots dos outros seriados. A maior parte das avaliacoes da serie game of thrones estao acima de 8.79, o que nao é verdade para os outros seriados, apesar de que breaking bad tem compartamento bem proximo.
+
+Um dos episodios de breaking bad obteve o score perfeito de 10 pontos. No entando a maior concentraçao de pontos esta em torno da mediana 8.8, sua mediana é um pouco mais baixa que a de game of thrones.
+
+Game of Thrones e Breaking Bad parecem ter uma qualidade de episodios parecida, pois as notas atribuidas pelos usuarios tem distribuiçao similar.
+
+A diferença nao é grande. Visto que os episodios podem receber notas entre 1 e 10, a mediana das notas de todas as series escolhidas estão entre 8 e 9.
+
+
+
+#### Qual das séries que você escolheu tem episódios de qualidade mais irregular segundo o IMDB? A diferença é grande? Pequena?
+
+Qualidade irregular é indicada pela variancia das notas atribuidas as series pelos usuarios.
+
+A serie que mais varia de qualidade entre um valor maximo e um valor minimo é Breaking Bad. 
+De acordo com o plot acima, a variaçao entre Breaking Bad, Game of Thrones e House of Cards tem variancia similar. Narcos parece ter seriados com qualidade mais constante, a maior parte das avaliaçoes estao concentradas proximo a mediana.
+
+**Desvio padrão:**
+```{r}
+got <- minhas_series %>%
+  filter(series_name == "Game of Thrones")
+bb <- minhas_series %>%
+  filter(series_name == "Breaking Bad")
+hoc <- minhas_series %>%
+  filter(series_name == "House of Cards")
+narcos <- minhas_series %>%
+  filter(series_name == "Narcos")
+```
+
+```{r}
+sd(got$UserRating)
+sd(bb$UserRating)
+sd(hoc$UserRating)
+sd(narcos$UserRating)
+
+
+```
+
+```{r}
+#Game of Thrones: 0.4492807
+#Breaking Bad:    0.498472
+#House of Cards:  0.3907828
+#Narcos:          0.253398
+
+```
+
+O desvio padrao mostra como as avaliacoes variam de acordo com a mediana, as series com qualidade mais irregular tem um maior desvio padrao.
+
+Narcos possui o menor desvio padrao, a maior concentracao de pontos esta em torno da mediana como pode se observar no boxplot.
+
+
+
+
+
+
+

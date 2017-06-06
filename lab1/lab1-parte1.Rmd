@@ -1,0 +1,54 @@
+---
+title: "Lab1-parte1"
+output: html_document
+author: Bruna Barbosa
+---
+
+## LAB1-PARTE1
+
+```{r message=FALSE}
+#library(tidyverse)
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+#series_from_imdb <- read_csv("~/Documents/ad1/lab1-parte1/series_from_imdb.csv")
+series_from_imdb <- read_csv("~/Documentos/ad1/lab1-parte1/series_from_imdb.csv")
+
+
+series_enc <- series_from_imdb %>% filter(series_name %in% c("How I Met Your Mother",
+                                                                "Friends",
+                                                                "Breaking Bad", 
+                                                                "Dexter"))
+
+## Series ja encerradas possuem uma proporcao maior de pessoas votando 10 no ultimo episodio
+# How I Met Your Mother
+# Friends
+# Breaking Bad
+# Dexter
+
+```
+
+## pegar o ultimo capitulo
+
+
+```{r}
+
+
+
+
+series_enc %>%
+    filter(series_name == "Dexter") %>%
+    ggplot(aes(x = UserRating)) + 
+    geom_histogram(binwidth = .5, fill = "white", color = "black") + 
+    geom_rug()
+
+series_enc 
+
+
+ggplot(alunos, mapping = aes(x = tempo_para_ufcg)) + 
+  geom_histogram(binwidth = 10) + 
+  geom_rug(colour = "red")
+
+
+```
