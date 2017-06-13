@@ -1,51 +1,48 @@
-install.packages("shiny")
-
-library(shiny)
 library(plotly)
-
-data(diamonds, package = "ggplot2")
-nms <- names(diamonds)
+library(shiny)
 
 ui <- fluidPage(
-  
-  headerPanel("Diamonds Explorer"),
-  sidebarPanel(
-    sliderInput('sampleSize', 'Sample Size', min = 1, max = nrow(diamonds),
-                value = 1000, step = 500, round = 0),
-    selectInput('x', 'X', choices = nms, selected = "carat"),
-    selectInput('y', 'Y', choices = nms, selected = "price"),
-    selectInput('color', 'Color', choices = nms, selected = "clarity"),
-    
-    selectInput('facet_row', 'Facet Row', c(None = '.', nms), selected = "clarity"),
-    selectInput('facet_col', 'Facet Column', c(None = '.', nms)),
-    sliderInput('plotHeight', 'Height of plot (in pixels)', 
-                min = 100, max = 2000, value = 1000)
-  ),
-  mainPanel(
-    plotlyOutput('trendPlot', height = "900px")
-  )
+  radioButtons("plotType", "Plot Type:", choices = c("ggplotly", "plotly")),
+  plotlyOutput("plot"),
+  verbatimTextOutput("hover"),
+  verbatimTextOutput("click"),
+  verbatimTextOutput("brush"),
+  verbatimTextOutput("zoom")
 )
 
-server <- function(input, output) {
+server <- function(input, output, session) {
   
-  #add reactive data information. Dataset = built in diamonds data
-  dataset <- reactive({
-    diamonds[sample(nrow(diamonds), input$sampleSize),]
+  output$plot <- renderPlotly({
+    # use the key aesthetic/argument to help uniquely identify selected observations
+    key <- row.names(mtcars)
+    if (identical(input$plotType, "ggplotly")) {
+      p <- ggplot(mtcars, aes(x = mpg, y = wt, colour = factor(vs), key = key)) + 
+        geom_point()
+      ggplotly(p) %>% layout(dragmode = "select")
+    } else {
+      plot_ly(mtcars, x = ~mpg, y = ~wt, key = ~key) %>%
+        layout(dragmode = "select")
+    }
   })
   
-  output$trendPlot <- renderPlotly({
-    
-    # build graph with ggplot syntax
-    p <- ggplot(dataset(), aes_string(x = input$x, y = input$y, color = input$color)) + 
-      geom_point()
-    
-    # if at least one facet column/row is specified, add it
-    facets <- paste(input$facet_row, '~', input$facet_col)
-    if (facets != '. ~ .') p <- p + facet_grid(facets)
-    
-    ggplotly(p) %>% 
-      layout(height = input$plotHeight, autosize=TRUE)
-    
+  output$hover <- renderPrint({
+    d <- event_data("plotly_hover")
+    if (is.null(d)) "Hover events appear here (unhover to clear)" else d
+  })
+  
+  output$click <- renderPrint({
+    d <- event_data("plotly_click")
+    if (is.null(d)) "Click events appear here (double-click to clear)" else d
+  })
+  
+  output$brush <- renderPrint({
+    d <- event_data("plotly_selected")
+    if (is.null(d)) "Click and drag events (i.e., select/lasso) appear here (double-click to clear)" else d
+  })
+  
+  output$zoom <- renderPrint({
+    d <- event_data("plotly_relayout")
+    if (is.null(d)) "Relayout (i.e., zoom) events appear here" else d
   })
   
 }
