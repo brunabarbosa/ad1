@@ -1,0 +1,74 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+library(shiny)
+library(plotly)
+library(readr)
+library(ggthemes)
+series_from_imdb <- read_csv("~/Documents/ad1/lab2/series_from_imdb.csv")
+
+
+ui <- shinyUI(fluidPage(
+
+  # Application title
+  titlePanel("Ideal Points"),
+
+  sidebarPanel(
+    h3("Ideal Points Estimation"),
+    # Select Justices name here
+    selectizeInput("name",
+                   label = "Country Name(s) of Interest",
+                   choices = unique(series_from_imdb$series_name),
+                   multiple = T,
+                   options = list(maxItems = 5, placeholder = 'Select a name'),
+                   selected = "Dexter"),
+    # Term plot
+    plotOutput("termPlot", height = 100),
+    helpText("covfefe")
+  ),
+
+  # Show a plot of the generated distribution
+  mainPanel(
+    plotlyOutput("trendPlot")
+  )
+)
+)
+
+server <- function(input, output, session)  {
+
+  output$trendPlot <- renderPlotly({
+
+    if (length(input$name) == 0) {
+      print("Please select at least one country")
+    } else {
+        p1 <- series_from_imdb %>%
+            filter(series_name == "Dexter") %>%
+            plot_ly(x = ~series_ep, y = ~r1, name = ~as.character(season), type = 'scatter', 
+                    mode = 'lines+markers', color = ~as.character(season))
+        
+        p2 <- series_from_imdb %>%
+            filter(series_name == "Dexter") %>%
+            plot_ly(x = ~series_ep, y = ~r10, type = 'scatter', 
+                    mode = 'lines+markers', color = ~as.character(season))
+        
+        
+        subplot(
+          p1, p2,
+          nrows = 2, shareX = TRUE
+        )
+
+
+    }
+
+  })
+}
+
+shinyApp(ui, server)
+```

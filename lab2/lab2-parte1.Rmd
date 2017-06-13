@@ -11,13 +11,26 @@ library(plotly)
 library(readr)
 library(dplyr)
 
-series_from_imdb <- read_csv("~/Documentos/ad1/lab2/series_from_imdb.csv")
+series_from_imdb <- read_csv("~/Documents/ad1/lab2/series_from_imdb.csv")
 
 
 ```
 
 
-## Including Plots
+## Proporçao de notas minimas e proporçao de notas maxima
+
+Nessa visualização é possivel analisar a proporção de pessoas que atribuiram a nota max e nota min ao seriado Dexter ao longo de todos os seus episodios. 
+
+No primeiro grafico mostra a proporçao de pessoas que atribuiram a menor nota possivel aos episodios do 
+seriado Dexter.
+
+No segundo grafico mostra a proporçao de pessoas que atribuiram a maior nota possivel aos episodios do 
+seriado Dexter.
+
+Cada temporada é representada por uma cor diferente. 
+
+De acordo com os dois graficos, é possivel notar que os usuarios que votaram no ultimo episodio nao gostaram 
+do final do seriado, pois há um pico de votos com nota minima e o numero de votos com a nota maxima diminuiu.
 
 ```{r pressure, echo=FALSE, message=FALSE, warning=FALSE}
 p1 <- plot_ly(data = series_from_imdb %>%
@@ -54,14 +67,8 @@ subplot(
   p1, p2,
   nrows = 2, shareX = TRUE
 )
-  ```
-
-Nessa visualização eu analiso a proporção de pessoas que atribuiram a nota max e nota min ao seriado Dexter ao longo de 
-todos os seus episodios. 
-
-Cada episodio recebeu uma proporção de pessoas que votaram a nota minima 
+```
+  
 
 
-O primeiro grafico mostra a proporcao de pessoas que atribuiram nota minima ao seriado.
 
-O segundo grafico mostra a proporção de pessoas que atribuiram nota maxima ao seriado.
