@@ -20,7 +20,12 @@ ui <- fluidPage(
   radioButtons("name", "Plot Type:", choices = c("Dexter", 
                                                  "Mr Robot",
                                                  "Sense8",
-                                                 "Black Mirror")),
+                                                 "Black Mirror",
+                                                 "Breaking Bad",
+                                                 "House of Cards",
+                                                 "Stranger Things",
+                                                 "Daredevil",
+                                                 "Game of Thrones")),
   plotlyOutput("plot"),
   verbatimTextOutput("hover"),
   verbatimTextOutput("click"),
@@ -38,9 +43,20 @@ server <- function(input, output, session) {
     key <- row.names(dexter)
 
     p1 <- plot_ly(dexter, x = ~series_ep, y = ~r10, key = ~key, color = ~as.character(season), 
+            mode =     "lines+markers" ) %>%
+        layout(dragmode = "select", title = "Proporcao que atribuiu nota max e min, respectivamente")
+      
+    
+    p2 <- plot_ly(dexter, x = ~series_ep, y = ~r1, key = ~key, color = ~as.character(season), 
             mode =     "lines+markers") %>%
         layout(dragmode = "select")
+    
+    p <- subplot(p1, p2, nrows = 2, margin = 0.04, heights = c(0.5, 0.5))
+
+    
   })
+  
+  
   
 }
 
