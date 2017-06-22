@@ -172,50 +172,99 @@ $(document).ready(function () {
 
 
 <!-- rnb-text-begin -->
-<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a> Notebook. When you execute code within the notebook, the results appear beneath the code.</p>
-<p>Try executing this chunk by clicking the <em>Run</em> button within the chunk or by placing your cursor inside it and pressing <em>Cmd+Shift+Enter</em>.</p>
+<div id="e-comum-o-episodio-piloto-de-uma-serie-receber-uma-maior-quantidade-de-notas-minimas-e-comum-o-ultimo-episodio-de-uma-serie-receber-notas-maximas" class="section level3">
+<h3>É comum o episodio piloto de uma serie receber uma maior quantidade de notas minimas? É comum o ultimo episodio de uma serie receber notas maximas?</h3>
+<p>Para isso vamos analisar a proporcao de notas minimas e maximas atribuidas a cada episodio pelos usuarios.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2hpbnlBcHAodWksIHNlcnZlcilcblxuYGBgIn0= -->
-<pre class="r"><code>shinyApp(ui, server)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShzaGlueSlcbmxpYnJhcnkocGxvdGx5KVxubGlicmFyeShyZWFkcilcbmxpYnJhcnkoZ2d0aGVtZXMpXG5saWJyYXJ5KGRwbHlyKVxuc2VyaWVzX2Zyb21faW1kYiA8LSByZWFkX2NzdihcIn4vRG9jdW1lbnRzL2FkMS9sYWIyL3Nlcmllc19mcm9tX2ltZGIuY3N2XCIpXG5gYGAifQ== -->
+<pre class="r"><code>library(shiny)
+library(plotly)
+library(readr)
+library(ggthemes)
+library(dplyr)
+series_from_imdb &lt;- read_csv(&quot;~/Documents/ad1/lab2/series_from_imdb.csv&quot;)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5MaXN0ZW5pbmcgb24gaHR0cDovLzEyNy4wLjAuMTo1OTk0XG5ObyB0cmFjZSB0eXBlIHNwZWNpZmllZDpcbiAgQmFzZWQgb24gaW5mbyBzdXBwbGllZCwgYSAnc2NhdHRlcicgdHJhY2Ugc2VlbXMgYXBwcm9wcmlhdGUuXG4gIFJlYWQgbW9yZSBhYm91dCB0aGlzIHRyYWNlIHR5cGUgLT4gaHR0cHM6Ly9wbG90Lmx5L3IvcmVmZXJlbmNlLyNzY2F0dGVyXG5ObyB0cmFjZSB0eXBlIHNwZWNpZmllZDpcbiAgQmFzZWQgb24gaW5mbyBzdXBwbGllZCwgYSAnc2NhdHRlcicgdHJhY2Ugc2VlbXMgYXBwcm9wcmlhdGUuXG4gIFJlYWQgbW9yZSBhYm91dCB0aGlzIHRyYWNlIHR5cGUgLT4gaHR0cHM6Ly9wbG90Lmx5L3IvcmVmZXJlbmNlLyNzY2F0dGVyXG5JZ25vcmluZyBleHBsaWNpdGx5IHByb3ZpZGVkIHdpZGdldCBJRCBcIjhiMzhmNDNiZVwiOyBTaGlueSBkb2Vzbid0IHVzZSB0aGVtTm8gdHJhY2UgdHlwZSBzcGVjaWZpZWQ6XG4gIEJhc2VkIG9uIGluZm8gc3VwcGxpZWQsIGEgJ3NjYXR0ZXInIHRyYWNlIHNlZW1zIGFwcHJvcHJpYXRlLlxuICBSZWFkIG1vcmUgYWJvdXQgdGhpcyB0cmFjZSB0eXBlIC0+IGh0dHBzOi8vcGxvdC5seS9yL3JlZmVyZW5jZS8jc2NhdHRlclxubWluaW1hbCB2YWx1ZSBmb3IgbiBpcyAzLCByZXR1cm5pbmcgcmVxdWVzdGVkIHBhbGV0dGUgd2l0aCAzIGRpZmZlcmVudCBsZXZlbHNcbk5vIHRyYWNlIHR5cGUgc3BlY2lmaWVkOlxuICBCYXNlZCBvbiBpbmZvIHN1cHBsaWVkLCBhICdzY2F0dGVyJyB0cmFjZSBzZWVtcyBhcHByb3ByaWF0ZS5cbiAgUmVhZCBtb3JlIGFib3V0IHRoaXMgdHJhY2UgdHlwZSAtPiBodHRwczovL3Bsb3QubHkvci9yZWZlcmVuY2UvI3NjYXR0ZXJcbm1pbmltYWwgdmFsdWUgZm9yIG4gaXMgMywgcmV0dXJuaW5nIHJlcXVlc3RlZCBwYWxldHRlIHdpdGggMyBkaWZmZXJlbnQgbGV2ZWxzXG5JZ25vcmluZyBleHBsaWNpdGx5IHByb3ZpZGVkIHdpZGdldCBJRCBcIjhiMzIxZDc4YzFlXCI7IFNoaW55IGRvZXNuJ3QgdXNlIHRoZW1ObyB0cmFjZSB0eXBlIHNwZWNpZmllZDpcbiAgQmFzZWQgb24gaW5mbyBzdXBwbGllZCwgYSAnc2NhdHRlcicgdHJhY2Ugc2VlbXMgYXBwcm9wcmlhdGUuXG4gIFJlYWQgbW9yZSBhYm91dCB0aGlzIHRyYWNlIHR5cGUgLT4gaHR0cHM6Ly9wbG90Lmx5L3IvcmVmZXJlbmNlLyNzY2F0dGVyXG5ObyB0cmFjZSB0eXBlIHNwZWNpZmllZDpcbiAgQmFzZWQgb24gaW5mbyBzdXBwbGllZCwgYSAnc2NhdHRlcicgdHJhY2Ugc2VlbXMgYXBwcm9wcmlhdGUuXG4gIFJlYWQgbW9yZSBhYm91dCB0aGlzIHRyYWNlIHR5cGUgLT4gaHR0cHM6Ly9wbG90Lmx5L3IvcmVmZXJlbmNlLyNzY2F0dGVyXG5JZ25vcmluZyBleHBsaWNpdGx5IHByb3ZpZGVkIHdpZGdldCBJRCBcIjhiMzIwNjQ0MGI0XCI7IFNoaW55IGRvZXNuJ3QgdXNlIHRoZW1ObyB0cmFjZSB0eXBlIHNwZWNpZmllZDpcbiAgQmFzZWQgb24gaW5mbyBzdXBwbGllZCwgYSAnc2NhdHRlcicgdHJhY2Ugc2VlbXMgYXBwcm9wcmlhdGUuXG4gIFJlYWQgbW9yZSBhYm91dCB0aGlzIHRyYWNlIHR5cGUgLT4gaHR0cHM6Ly9wbG90Lmx5L3IvcmVmZXJlbmNlLyNzY2F0dGVyXG5taW5pbWFsIHZhbHVlIGZvciBuIGlzIDMsIHJldHVybmluZyByZXF1ZXN0ZWQgcGFsZXR0ZSB3aXRoIDMgZGlmZmVyZW50IGxldmVsc1xuTm8gdHJhY2UgdHlwZSBzcGVjaWZpZWQ6XG4gIEJhc2VkIG9uIGluZm8gc3VwcGxpZWQsIGEgJ3NjYXR0ZXInIHRyYWNlIHNlZW1zIGFwcHJvcHJpYXRlLlxuICBSZWFkIG1vcmUgYWJvdXQgdGhpcyB0cmFjZSB0eXBlIC0+IGh0dHBzOi8vcGxvdC5seS9yL3JlZmVyZW5jZS8jc2NhdHRlclxubWluaW1hbCB2YWx1ZSBmb3IgbiBpcyAzLCByZXR1cm5pbmcgcmVxdWVzdGVkIHBhbGV0dGUgd2l0aCAzIGRpZmZlcmVudCBsZXZlbHNcbklnbm9yaW5nIGV4cGxpY2l0bHkgcHJvdmlkZWQgd2lkZ2V0IElEIFwiOGIzNjBkZjVlOThcIjsgU2hpbnkgZG9lc24ndCB1c2UgdGhlbVxuIn0= -->
+<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICBzZXJpZXNfbmFtZSA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgc2VyaWVzX2VwID0gY29sX2ludGVnZXIoKSxcbiAgc2Vhc29uID0gY29sX2ludGVnZXIoKSxcbiAgc2Vhc29uX2VwID0gY29sX2ludGVnZXIoKSxcbiAgdXJsID0gY29sX2NoYXJhY3RlcigpLFxuICBFcGlzb2RlID0gY29sX2NoYXJhY3RlcigpLFxuICBVc2VyUmF0aW5nID0gY29sX2RvdWJsZSgpLFxuICBVc2VyVm90ZXMgPSBjb2xfZG91YmxlKCksXG4gIHIxID0gY29sX2RvdWJsZSgpLFxuICByMTAgPSBjb2xfZG91YmxlKCksXG4gIHIyID0gY29sX2RvdWJsZSgpLFxuICByMyA9IGNvbF9kb3VibGUoKSxcbiAgcjQgPSBjb2xfZG91YmxlKCksXG4gIHI1ID0gY29sX2RvdWJsZSgpLFxuICByNiA9IGNvbF9kb3VibGUoKSxcbiAgcjcgPSBjb2xfZG91YmxlKCksXG4gIHI4ID0gY29sX2RvdWJsZSgpLFxuICByOSA9IGNvbF9kb3VibGUoKVxuKVxuIn0= -->
+<pre><code>Parsed with column specification:
+cols(
+  series_name = col_character(),
+  series_ep = col_integer(),
+  season = col_integer(),
+  season_ep = col_integer(),
+  url = col_character(),
+  Episode = col_character(),
+  UserRating = col_double(),
+  UserVotes = col_double(),
+  r1 = col_double(),
+  r10 = col_double(),
+  r2 = col_double(),
+  r3 = col_double(),
+  r4 = col_double(),
+  r5 = col_double(),
+  r6 = col_double(),
+  r7 = col_double(),
+  r8 = col_double(),
+  r9 = col_double()
+)</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudWkgPC0gZmx1aWRQYWdlKFxuICByYWRpb0J1dHRvbnMoXCJuYW1lXCIsIFwiUGxvdCBUeXBlOlwiLCBjaG9pY2VzID0gYyhcIkRleHRlclwiLCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIk1yIFJvYm90XCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJTZW5zZThcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIkJsYWNrIE1pcnJvclwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiQnJlYWtpbmcgQmFkXCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJIb3VzZSBvZiBDYXJkc1wiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiU3RyYW5nZXIgVGhpbmdzXCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJEYXJlZGV2aWxcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIkdhbWUgb2YgVGhyb25lc1wiKSksXG4gIHBsb3RseU91dHB1dChcInBsb3RcIiksXG4gIHZlcmJhdGltVGV4dE91dHB1dChcImhvdmVyXCIpLFxuICB2ZXJiYXRpbVRleHRPdXRwdXQoXCJjbGlja1wiKSxcbiAgdmVyYmF0aW1UZXh0T3V0cHV0KFwiYnJ1c2hcIiksXG4gIHZlcmJhdGltVGV4dE91dHB1dChcInpvb21cIilcbilcbnNlcnZlciA8LSBmdW5jdGlvbihpbnB1dCwgb3V0cHV0LCBzZXNzaW9uKSB7XG4gIFxuICBvdXRwdXQkcGxvdCA8LSByZW5kZXJQbG90bHkoe1xuICAgICMgdXNlIHRoZSBrZXkgYWVzdGhldGljL2FyZ3VtZW50IHRvIGhlbHAgdW5pcXVlbHkgaWRlbnRpZnkgc2VsZWN0ZWQgb2JzZXJ2YXRpb25zXG4gICAgZGV4dGVyIDwtIHNlcmllc19mcm9tX2ltZGIgJT4lXG4gICAgICAgICAgICBmaWx0ZXIoc2VyaWVzX25hbWUgPT0gaW5wdXQkbmFtZSlcbiAgICBrZXkgPC0gcm93Lm5hbWVzKGRleHRlcilcbiAgICBwMSA8LSBwbG90X2x5KGRleHRlciwgeCA9IH5zZXJpZXNfZXAsIHkgPSB+cjEwLCBrZXkgPSB+a2V5LCBjb2xvciA9IH5hcy5jaGFyYWN0ZXIoc2Vhc29uKSwgXG4gICAgICAgICAgICBtb2RlID0gICAgIFwibGluZXMrbWFya2Vyc1wiICkgJT4lXG4gICAgICAgIGxheW91dChkcmFnbW9kZSA9IFwic2VsZWN0XCIsIHRpdGxlID0gXCJQcm9wb3JjYW8gcXVlIGF0cmlidWl1IG5vdGEgbWF4IGUgbWluLCByZXNwZWN0aXZhbWVudGVcIilcbiAgICAgIFxuICAgIFxuICAgIHAyIDwtIHBsb3RfbHkoZGV4dGVyLCB4ID0gfnNlcmllc19lcCwgeSA9IH5yMSwga2V5ID0gfmtleSwgY29sb3IgPSB+YXMuY2hhcmFjdGVyKHNlYXNvbiksIFxuICAgICAgICAgICAgbW9kZSA9ICAgICBcImxpbmVzK21hcmtlcnNcIikgJT4lXG4gICAgICAgIGxheW91dChkcmFnbW9kZSA9IFwic2VsZWN0XCIpXG4gICAgXG4gICAgcCA8LSBzdWJwbG90KHAxLCBwMiwgbnJvd3MgPSAyLCBtYXJnaW4gPSAwLjA0LCBoZWlnaHRzID0gYygwLjUsIDAuNSkpXG4gICAgXG4gIH0pXG4gIFxuICBcbiAgXG59XG5zaGlueUFwcCh1aSwgc2VydmVyKVxuYGBgIn0= -->
+<pre class="r"><code>ui &lt;- fluidPage(
+  radioButtons(&quot;name&quot;, &quot;Plot Type:&quot;, choices = c(&quot;Dexter&quot;, 
+                                                 &quot;Mr Robot&quot;,
+                                                 &quot;Sense8&quot;,
+                                                 &quot;Black Mirror&quot;,
+                                                 &quot;Breaking Bad&quot;,
+                                                 &quot;House of Cards&quot;,
+                                                 &quot;Stranger Things&quot;,
+                                                 &quot;Daredevil&quot;,
+                                                 &quot;Game of Thrones&quot;)),
+  plotlyOutput(&quot;plot&quot;),
+  verbatimTextOutput(&quot;hover&quot;),
+  verbatimTextOutput(&quot;click&quot;),
+  verbatimTextOutput(&quot;brush&quot;),
+  verbatimTextOutput(&quot;zoom&quot;)
+)
+server &lt;- function(input, output, session) {
+  
+  output$plot &lt;- renderPlotly({
+    # use the key aesthetic/argument to help uniquely identify selected observations
+    dexter &lt;- series_from_imdb %&gt;%
+            filter(series_name == input$name)
+    key &lt;- row.names(dexter)
+    p1 &lt;- plot_ly(dexter, x = ~series_ep, y = ~r10, key = ~key, color = ~as.character(season), 
+            mode =     &quot;lines+markers&quot; ) %&gt;%
+        layout(dragmode = &quot;select&quot;, title = &quot;Proporcao que atribuiu nota max e min, respectivamente&quot;)
+      
+    
+    p2 &lt;- plot_ly(dexter, x = ~series_ep, y = ~r1, key = ~key, color = ~as.character(season), 
+            mode =     &quot;lines+markers&quot;) %&gt;%
+        layout(dragmode = &quot;select&quot;)
+    
+    p &lt;- subplot(p1, p2, nrows = 2, margin = 0.04, heights = c(0.5, 0.5))
+    
+  })
+  
+  
+  
+}
+shinyApp(ui, server)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5MaXN0ZW5pbmcgb24gaHR0cDovLzEyNy4wLjAuMTo1MjQ2XG5ObyB0cmFjZSB0eXBlIHNwZWNpZmllZDpcbiAgQmFzZWQgb24gaW5mbyBzdXBwbGllZCwgYSAnc2NhdHRlcicgdHJhY2Ugc2VlbXMgYXBwcm9wcmlhdGUuXG4gIFJlYWQgbW9yZSBhYm91dCB0aGlzIHRyYWNlIHR5cGUgLT4gaHR0cHM6Ly9wbG90Lmx5L3IvcmVmZXJlbmNlLyNzY2F0dGVyXG5ObyB0cmFjZSB0eXBlIHNwZWNpZmllZDpcbiAgQmFzZWQgb24gaW5mbyBzdXBwbGllZCwgYSAnc2NhdHRlcicgdHJhY2Ugc2VlbXMgYXBwcm9wcmlhdGUuXG4gIFJlYWQgbW9yZSBhYm91dCB0aGlzIHRyYWNlIHR5cGUgLT4gaHR0cHM6Ly9wbG90Lmx5L3IvcmVmZXJlbmNlLyNzY2F0dGVyXG5JZ25vcmluZyBleHBsaWNpdGx5IHByb3ZpZGVkIHdpZGdldCBJRCBcImIwYjQ1MDBmZWZlXCI7IFNoaW55IGRvZXNuJ3QgdXNlIHRoZW1cbiJ9 -->
 <pre><code>
-Listening on http://127.0.0.1:5994
+Listening on http://127.0.0.1:5246
 No trace type specified:
   Based on info supplied, a 'scatter' trace seems appropriate.
   Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter
 No trace type specified:
   Based on info supplied, a 'scatter' trace seems appropriate.
   Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter
-Ignoring explicitly provided widget ID &quot;8b38f43be&quot;; Shiny doesn't use themNo trace type specified:
-  Based on info supplied, a 'scatter' trace seems appropriate.
-  Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter
-minimal value for n is 3, returning requested palette with 3 different levels
-No trace type specified:
-  Based on info supplied, a 'scatter' trace seems appropriate.
-  Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter
-minimal value for n is 3, returning requested palette with 3 different levels
-Ignoring explicitly provided widget ID &quot;8b321d78c1e&quot;; Shiny doesn't use themNo trace type specified:
-  Based on info supplied, a 'scatter' trace seems appropriate.
-  Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter
-No trace type specified:
-  Based on info supplied, a 'scatter' trace seems appropriate.
-  Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter
-Ignoring explicitly provided widget ID &quot;8b3206440b4&quot;; Shiny doesn't use themNo trace type specified:
-  Based on info supplied, a 'scatter' trace seems appropriate.
-  Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter
-minimal value for n is 3, returning requested palette with 3 different levels
-No trace type specified:
-  Based on info supplied, a 'scatter' trace seems appropriate.
-  Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter
-minimal value for n is 3, returning requested palette with 3 different levels
-Ignoring explicitly provided widget ID &quot;8b360df5e98&quot;; Shiny doesn't use them</code></pre>
+Ignoring explicitly provided widget ID &quot;b0b4500fefe&quot;; Shiny doesn't use them</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
+</div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKVGhpcyBpcyBhbiBbUiBNYXJrZG93bl0oaHR0cDovL3JtYXJrZG93bi5yc3R1ZGlvLmNvbSkgTm90ZWJvb2suIFdoZW4geW91IGV4ZWN1dGUgY29kZSB3aXRoaW4gdGhlIG5vdGVib29rLCB0aGUgcmVzdWx0cyBhcHBlYXIgYmVuZWF0aCB0aGUgY29kZS4gCgpUcnkgZXhlY3V0aW5nIHRoaXMgY2h1bmsgYnkgY2xpY2tpbmcgdGhlICpSdW4qIGJ1dHRvbiB3aXRoaW4gdGhlIGNodW5rIG9yIGJ5IHBsYWNpbmcgeW91ciBjdXJzb3IgaW5zaWRlIGl0IGFuZCBwcmVzc2luZyAqQ21kK1NoaWZ0K0VudGVyKi4gCgpgYGB7cn0KbGlicmFyeShzaGlueSkKbGlicmFyeShwbG90bHkpCmxpYnJhcnkocmVhZHIpCmxpYnJhcnkoZ2d0aGVtZXMpCmxpYnJhcnkoZHBseXIpCnNlcmllc19mcm9tX2ltZGIgPC0gcmVhZF9jc3YoIn4vRG9jdW1lbnRzL2FkMS9sYWIyL3Nlcmllc19mcm9tX2ltZGIuY3N2IikKCgp1aSA8LSBmbHVpZFBhZ2UoCiAgcmFkaW9CdXR0b25zKCJuYW1lIiwgIlBsb3QgVHlwZToiLCBjaG9pY2VzID0gYygiRGV4dGVyIiwgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiTXIgUm9ib3QiLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIlNlbnNlOCIsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiQmxhY2sgTWlycm9yIiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICJCcmVha2luZyBCYWQiLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIkhvdXNlIG9mIENhcmRzIiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICJTdHJhbmdlciBUaGluZ3MiLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIkRhcmVkZXZpbCIsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiR2FtZSBvZiBUaHJvbmVzIikpLAogIHBsb3RseU91dHB1dCgicGxvdCIpLAogIHZlcmJhdGltVGV4dE91dHB1dCgiaG92ZXIiKSwKICB2ZXJiYXRpbVRleHRPdXRwdXQoImNsaWNrIiksCiAgdmVyYmF0aW1UZXh0T3V0cHV0KCJicnVzaCIpLAogIHZlcmJhdGltVGV4dE91dHB1dCgiem9vbSIpCikKCgpzZXJ2ZXIgPC0gZnVuY3Rpb24oaW5wdXQsIG91dHB1dCwgc2Vzc2lvbikgewogIAogIG91dHB1dCRwbG90IDwtIHJlbmRlclBsb3RseSh7CiAgICAjIHVzZSB0aGUga2V5IGFlc3RoZXRpYy9hcmd1bWVudCB0byBoZWxwIHVuaXF1ZWx5IGlkZW50aWZ5IHNlbGVjdGVkIG9ic2VydmF0aW9ucwogICAgZGV4dGVyIDwtIHNlcmllc19mcm9tX2ltZGIgJT4lCiAgICAgICAgICAgIGZpbHRlcihzZXJpZXNfbmFtZSA9PSBpbnB1dCRuYW1lKQogICAga2V5IDwtIHJvdy5uYW1lcyhkZXh0ZXIpCgogICAgcDEgPC0gcGxvdF9seShkZXh0ZXIsIHggPSB+c2VyaWVzX2VwLCB5ID0gfnIxMCwga2V5ID0gfmtleSwgY29sb3IgPSB+YXMuY2hhcmFjdGVyKHNlYXNvbiksIAogICAgICAgICAgICBtb2RlID0gICAgICJsaW5lcyttYXJrZXJzIiApICU+JQogICAgICAgIGxheW91dChkcmFnbW9kZSA9ICJzZWxlY3QiLCB0aXRsZSA9ICJQcm9wb3JjYW8gcXVlIGF0cmlidWl1IG5vdGEgbWF4IGUgbWluLCByZXNwZWN0aXZhbWVudGUiKQogICAgICAKICAgIAogICAgcDIgPC0gcGxvdF9seShkZXh0ZXIsIHggPSB+c2VyaWVzX2VwLCB5ID0gfnIxLCBrZXkgPSB+a2V5LCBjb2xvciA9IH5hcy5jaGFyYWN0ZXIoc2Vhc29uKSwgCiAgICAgICAgICAgIG1vZGUgPSAgICAgImxpbmVzK21hcmtlcnMiKSAlPiUKICAgICAgICBsYXlvdXQoZHJhZ21vZGUgPSAic2VsZWN0IikKICAgIAogICAgcCA8LSBzdWJwbG90KHAxLCBwMiwgbnJvd3MgPSAyLCBtYXJnaW4gPSAwLjA0LCBoZWlnaHRzID0gYygwLjUsIDAuNSkpCgogICAgCiAgfSkKICAKICAKICAKfQoKc2hpbnlBcHAodWksIHNlcnZlcikKYGBgCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKCiMjI8OJIGNvbXVtIG8gZXBpc29kaW8gcGlsb3RvIGRlIHVtYSBzZXJpZSByZWNlYmVyIHVtYSBtYWlvciBxdWFudGlkYWRlIGRlIG5vdGFzIG1pbmltYXM/IMOJIGNvbXVtIG8gdWx0aW1vIGVwaXNvZGlvIGRlIHVtYSBzZXJpZSByZWNlYmVyIG5vdGFzIG1heGltYXM/CgpQYXJhIGlzc28gdmFtb3MgYW5hbGlzYXIgYSBwcm9wb3JjYW8gZGUgbm90YXMgbWluaW1hcyBlIG1heGltYXMgYXRyaWJ1aWRhcyBhIGNhZGEgZXBpc29kaW8gcGVsb3MgdXN1YXJpb3MuCgpgYGB7cn0KbGlicmFyeShzaGlueSkKbGlicmFyeShwbG90bHkpCmxpYnJhcnkocmVhZHIpCmxpYnJhcnkoZ2d0aGVtZXMpCmxpYnJhcnkoZHBseXIpCnNlcmllc19mcm9tX2ltZGIgPC0gcmVhZF9jc3YoIn4vRG9jdW1lbnRzL2FkMS9sYWIyL3Nlcmllc19mcm9tX2ltZGIuY3N2IikKCgp1aSA8LSBmbHVpZFBhZ2UoCiAgcmFkaW9CdXR0b25zKCJuYW1lIiwgIlBsb3QgVHlwZToiLCBjaG9pY2VzID0gYygiRGV4dGVyIiwgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiTXIgUm9ib3QiLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIlNlbnNlOCIsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiQmxhY2sgTWlycm9yIiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICJCcmVha2luZyBCYWQiLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIkhvdXNlIG9mIENhcmRzIiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICJTdHJhbmdlciBUaGluZ3MiLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIkRhcmVkZXZpbCIsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiR2FtZSBvZiBUaHJvbmVzIikpLAogIHBsb3RseU91dHB1dCgicGxvdCIpLAogIHZlcmJhdGltVGV4dE91dHB1dCgiaG92ZXIiKSwKICB2ZXJiYXRpbVRleHRPdXRwdXQoImNsaWNrIiksCiAgdmVyYmF0aW1UZXh0T3V0cHV0KCJicnVzaCIpLAogIHZlcmJhdGltVGV4dE91dHB1dCgiem9vbSIpCikKCgpzZXJ2ZXIgPC0gZnVuY3Rpb24oaW5wdXQsIG91dHB1dCwgc2Vzc2lvbikgewogIAogIG91dHB1dCRwbG90IDwtIHJlbmRlclBsb3RseSh7CiAgICAjIHVzZSB0aGUga2V5IGFlc3RoZXRpYy9hcmd1bWVudCB0byBoZWxwIHVuaXF1ZWx5IGlkZW50aWZ5IHNlbGVjdGVkIG9ic2VydmF0aW9ucwogICAgZGV4dGVyIDwtIHNlcmllc19mcm9tX2ltZGIgJT4lCiAgICAgICAgICAgIGZpbHRlcihzZXJpZXNfbmFtZSA9PSBpbnB1dCRuYW1lKQogICAga2V5IDwtIHJvdy5uYW1lcyhkZXh0ZXIpCgogICAgcDEgPC0gcGxvdF9seShkZXh0ZXIsIHggPSB+c2VyaWVzX2VwLCB5ID0gfnIxMCwga2V5ID0gfmtleSwgY29sb3IgPSB+YXMuY2hhcmFjdGVyKHNlYXNvbiksIAogICAgICAgICAgICBtb2RlID0gICAgICJsaW5lcyttYXJrZXJzIiApICU+JQogICAgICAgIGxheW91dChkcmFnbW9kZSA9ICJzZWxlY3QiLCB0aXRsZSA9ICJQcm9wb3JjYW8gcXVlIGF0cmlidWl1IG5vdGEgbWF4IGUgbWluLCByZXNwZWN0aXZhbWVudGUiKQogICAgICAKICAgIAogICAgcDIgPC0gcGxvdF9seShkZXh0ZXIsIHggPSB+c2VyaWVzX2VwLCB5ID0gfnIxLCBrZXkgPSB+a2V5LCBjb2xvciA9IH5hcy5jaGFyYWN0ZXIoc2Vhc29uKSwgCiAgICAgICAgICAgIG1vZGUgPSAgICAgImxpbmVzK21hcmtlcnMiKSAlPiUKICAgICAgICBsYXlvdXQoZHJhZ21vZGUgPSAic2VsZWN0IikKICAgIAogICAgcCA8LSBzdWJwbG90KHAxLCBwMiwgbnJvd3MgPSAyLCBtYXJnaW4gPSAwLjA0LCBoZWlnaHRzID0gYygwLjUsIDAuNSkpCgogICAgCiAgfSkKICAKICAKICAKfQoKc2hpbnlBcHAodWksIHNlcnZlcikKYGBgCg==</div>
 
 
 

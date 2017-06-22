@@ -1,0 +1,171 @@
+---
+title: "Lab2-parte3"
+output: html_document
+author: Bruna Barbosa
+---
+
+```{r load_code, message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse, warn.conflicts = F)
+library(rvest)
+library(plotly)
+library(cluster)
+library(ggdendro)
+#library(fpc)
+theme_set(theme_light())
+source("plota_solucoes_hclust.R")
+```
+
+# Tipos de filme de Matt Damon
+
+Usaremos dados do [Rotten Tomatoes](https://www.rottentomatoes.com) sobre os filmes de Matt Damon. 
+
+
+```{r, message=FALSE, warning=FALSE}
+from_page <- read_html("https://www.rottentomatoes.com/celebrity/matt_damon/") %>% 
+    html_node("#filmographyTbl") %>% # A sintaxe da expressão é de um seletor à lá JQuery: https://rdrr.io/cran/rvest/man/html_nodes.html 
+    html_table(fill=TRUE) %>% # Faz parse
+    as.tibble()
+
+filmes = from_page %>% 
+    filter(RATING != "No Score Yet", 
+           `BOX OFFICE` != "—", 
+           CREDIT != "Executive Producer") %>%
+    mutate(RATING = as.numeric(gsub("%", "", RATING)), 
+           `BOX OFFICE` = as.numeric(gsub("[$|M]", "", `BOX OFFICE`))) %>% 
+    filter(`BOX OFFICE` >= 1) # Tem dois filmes que não parecem ter sido lançados no mundo todo
+```
+# Rating
+
+Dentre os 40 filmes estrelados por Matt Damon é possivel notar uma grande variaçao entre as notas no rotten tomatoes. Nao ha concentraçao de pontos visiveis. 
+
+```{r}
+filmes %>% 
+    ggplot(aes(x = "Filmes", y = RATING)) + 
+    geom_jitter(width = .01, height = 0, size = 2, alpha = .6)
+```
+
+
+```{r}
+filmes %>% 
+    ggplot(aes(x = RATING)) + 
+    geom_histogram(bins = 16) + 
+    geom_rug()
+```
+
+# Renda
+
+Para a renda do filme, observar uma escala linear ou logarítmica levam a conclusões diferentes. 
+Quanto a rentabilidade do filme, Matt Damon atuou em varios filmes de alta rentabilidade.
+
+```{r}
+filmes %>% 
+    ggplot(aes(x = "Filmes", y = `BOX OFFICE`)) + 
+    geom_jitter(width = .02, height = 0, size = 2, alpha = .6)  
+
+filmes %>% 
+    ggplot(aes(x = "Filmes", y = `BOX OFFICE`)) + 
+    geom_jitter(width = .02, height = 0, size = 2, alpha = .6) + 
+    scale_y_log10()
+
+filmes %>% 
+    ggplot(aes(x = `BOX OFFICE`)) + 
+    geom_histogram(bins = 20) + 
+    geom_rug()
+
+filmes %>% 
+    ggplot(aes(x = `BOX OFFICE`)) + 
+    geom_histogram(bins = 20) + 
+    scale_x_log10() + 
+    geom_rug()
+
+```
+
+## Duas dimensões - RATING X BOX OFFICE
+
+```{r}
+p = filmes %>% 
+    ggplot(aes(x = RATING, y = `BOX OFFICE`, label = TITLE)) + 
+    geom_point() 
+p
+#ggplotly(p)
+```
+
+
+Como sempre, o algoritmo encontra grupos. No caso, parecem até bem separados. Vamos visualizá-los:
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+agrupamento_h_2d = filmes %>% 
+    column_to_rownames("TITLE") %>%
+    select(RATING, `BOX OFFICE`) %>%
+    dist(method = "euclidean") %>% 
+    hclust(method = "centroid")
+
+```
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+plota_hclusts_2d(agrupamento_h_2d, 
+                 filmes, 
+                 c("RATING", "`BOX OFFICE`"), 
+                 linkage_method = "centroid", ks = 1:6)
+```
+
+O agrupamento está acontecendo todo em função de BOX OFFICE, apenas. Como as escalas são diferentes, BOX OFFICE domina qualquer cálculo de distância euclidiana. 
+
+Solução: standardize (aka scale).
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+agrupamento_h_2d = filmes %>% 
+    column_to_rownames("TITLE") %>%
+    select(RATING, `BOX OFFICE`) %>% 
+    mutate(`BOX OFFICE` = log10(`BOX OFFICE`)) %>% 
+    mutate_all(funs(scale)) %>% 
+    dist(method = "euclidean") %>% 
+    hclust(method = "centroid")
+
+#ggdendrogram(agrupamento_h_2d, rotate = TRUE)
+
+filmes2 = filmes %>% mutate(`BOX OFFICE` = log10(`BOX OFFICE`))
+plota_hclusts_2d(agrupamento_h_2d, 
+                 filmes2, 
+                 c("RATING", "`BOX OFFICE`"), 
+                 linkage_method = "ward.D", ks = 1:6) + scale_y_log10()
+
+```
+
+O algoritmo consegue definir clusters bem definidos no grupo 3, esses pontos tem semelhanças considerando o rating obtido e a renda dos filmes. 
+
+# Agrupamento - kmeans
+
+```{r}
+#k <- kmeans(filmes, 3)
+dat <- filmes[,c(1,4)]
+
+#plot(dat, pch = 20, cex = 2)
+set.seed(7)
+km1 <- kmeans(dat, 3)
+plot(dat, col = km1$cluster, pch = 20, cex = 2)
+```
+
+# Agrupamento - kmeans (standardize)
+```{r}
+#k <- kmeans(filmes, 3)
+dat <- filmes2[,c(1,4)]
+
+#plot(dat, pch = 20, cex = 2)
+set.seed(7)
+km1 <- kmeans(dat, 3)
+plot(dat, col = km1$cluster, pch = 20, cex = 2)
+```
+
+O plot standardize facilita a visualizaçao dos clusters.
+
+Considerando os plots acima, é possivel notar que o ator Matt Damon participa de muitos filmes de alta rentabilidade, a principal diferenca entre os tres grupos esta nas notas atribuidas pelo rotten tomatoes.
+
+1. Jason Bourne franquia (vermelho) - nesse grupo estao a maioria dos seus filmes mais rentaveis e de maior rating,como The Bourne Ultimatum e The Martian. Nesse grupo o ator foi o personagem principal em maior parte dos filmes deste grupo.
+2. Happy Feet (verde) - Os filmes desse grupos ainda tem boa rentabilidade e rating mediano, porem o ator nao recebeu papeis de grande destaque como no primeiro grupo. Um dos filmes do grupo 2 é Interstellar
+3. The Great Wall(preto) - Neste grupo estao os filmes com uma rentabilidade um pouco menor e menor rating, como Happy Feet Two.
+
+
+
+
