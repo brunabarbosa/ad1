@@ -1,33 +1,72 @@
 ---
 title: "Lab3-Parte2"
-author: "Bruna Barbosa"
 date: "23 de junho de 2017"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+## Dados
+
+```{r input, message=FALSE, warning=FALSE}
+
+library(readr)
+library(dplyr)
+library(plotly)
+library(cluster)
+library(ggdendro)
+
+character_list5 <- read_csv("~/Documents/ad1/lab3/character_list5.csv")
+meta_data7 <- read_csv("~/Documents/ad1/lab3/meta_data7.csv")
+
+dados_filmes <-  merge(meta_data7, character_list5)
+
+dados_filmes[dados_filmes == "NULL"] = NA
+dados_filmes$age <- as.integer(dados_filmes$age)
+
+sexo_masc <-  dados_filmes %>% 
+  group_by(title, year) %>% 
+  filter(gender == 'm') %>%
+  summarise(total_m = sum(words), media_age_m =  as.integer(mean(age, na.rm=TRUE)))  
+
+  
+sexo_fem <-  dados_filmes %>% 
+  group_by(title, year) %>% 
+  filter(gender == 'f') %>%
+  summarise(total_f = sum(words), media_age_f =  as.integer(mean(age, na.rm=TRUE)))  
+
+atributos <- merge(sexo_masc, sexo_fem) 
+atributos$total <- atributos$total_f + atributos$total_m 
+
+atributos <- atributos %>% 
+  mutate(total_f = total_f / total) 
+
+atributos <- atributos %>% 
+  mutate(total_m = total_m / total) 
+
 ```
 
-## R Markdown
+## Agrupamento
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Atributos:
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+1. Porcentagem de palavras faladas por homens
+2. Porcentagem de palavras faladas por mulheres
+3. Media da idade de atores
+4. Media da idade de atrizes
 
-```{r cars}
-summary(cars)
+```{r}
+library(tidyr)
 
-#media de palavras - sexo feminino
-#media de palavras - sexo masculino
+atributos$media_age_m <- as.numeric(atributos$media_age_m)
+atributos$media_age_f <- as.numeric(atributos$media_age_f)
+
+atributos <- atributos %>% drop_na()
+#k <- kmeans(filmes, 3)
+dat <- atributos[,c(3,4, 5, 6)]
+str(dat)
+
+#plot(dat, pch = 20, cex = 2)
+set.seed(7)
+
+km1 <- kmeans(dat, 3)
+plot(dat, col = km1$cluster, pch = 20, cex = 2)
 ```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
