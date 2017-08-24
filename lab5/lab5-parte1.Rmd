@@ -1,0 +1,49 @@
+---
+title: "R Notebook"
+output:
+  html_document: default
+  html_notebook: default
+---
+
+
+### 1. Aparência é importante para o sexo masculino?
+
+```{r, message=FALSE, warning=FALSE}
+library(readr)
+library(tidyverse)
+library(plotly)
+speed_dating <- read_csv("~/Documents/ad1/lab5/speed-dating/speed-dating.csv")
+speed_dating2 <- read_csv("~/Documents/ad1/lab5/speed-dating/speed-dating2.csv")
+
+
+
+```
+
+
+#### Gender
+
+A quantidade de homens(1) e mulheres(0) é semelhante.
+
+```{r}
+plot_ly(speed_dating,
+        x = ~as.character(gender),
+        type = 'histogram') %>%
+  layout(title = "Speed Dating Dataset - Gender",
+        xaxis = list(title = "Gender"),
+        yaxis = list(title = "Count"))
+
+```
+
+#### Age
+
+
+```{r}
+speed_dating %>% 
+  filter(gender == 0) %>% 
+  plot_ly(y = ~ age, type = "box")
+
+
+
+
+```
+
